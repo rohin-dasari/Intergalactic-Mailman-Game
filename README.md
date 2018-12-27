@@ -12,7 +12,7 @@ This is a simple arcade game that uses your face as a controller. You're (as the
 
 # Getting Started
 Make sure you have all of the above packages installed on your machine. You'll need the Dlib shape predictor to recognize the facial landmarks. Simply run the game by running the following:
-'''python3 InterGalactic-Mailman.py'''
+```python3 InterGalactic-Mailman.py```
 
 # Motivation
 This game was developed as a possible method for people with disabilities to be able to play games without physical controllers. 
