@@ -9,6 +9,7 @@ This is a simple arcade game that uses your face as a controller. You're (as the
  - SciPy
  - PIL
  - Numpy
+ - Imutils
 
 # Getting Started
 Make sure you have all of the above packages installed on your machine. You'll need the Dlib shape predictor to recognize the facial landmarks. Simply run the game by running the following in your terminal:
@@ -21,5 +22,6 @@ This game was developed as a possible method for people with disabilities to be 
 
 
  
- #
+ # Author
+ Rohin Dasari
 
