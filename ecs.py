@@ -42,7 +42,9 @@ class Entity:
         entities = cls.cindex.get(component_name)
         def filter_values(entity):
             for name in entity.components:
-                if entity.components[name] == where: return True
+                try:
+                    if entity.components[name] == where: return True
+                except: pass
             return False
         if where != None and entities != None: entities = list(filter(lambda e: filter_values(e), entities))
         return entities if entities is not None else []
@@ -51,6 +53,22 @@ class Entity:
     @classmethod
     def get(cls, eid):
         return cls.eindex.get(eid)
+
+    @classmethod
+    def detach_entity(cls, eid):
+        entity = cls.get(eid)
+        for name in entity.components:
+            entities_with_comp = cls.cindex[name]
+            entities_to_keep = []
+            for ent in entities_with_comp:
+                if ent.uid != eid: 
+                    entities_to_keep.append(ent)
+
+            cls.cindex[name] = entities_to_keep
+                
+                            
+                
+        del cls.eindex[eid]
 
 
     def __str__(self):
