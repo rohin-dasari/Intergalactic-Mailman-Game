@@ -92,6 +92,7 @@ class RenderingSystem(ecs.System):
         for entity in entities_to_render:
             position = entity.components['position']
             sprite = entity.components['sprite']
+            self.display.blit(sprite, (position.x, position.y))
             if 'contour_to_render' in entity.components:
                 points = entity.components['contour_to_render']
                 for i in range(len(points)-2):
@@ -118,7 +119,6 @@ class RenderingSystem(ecs.System):
             #            20
             #            )
 
-            self.display.blit(sprite, (position.x, position.y))
 
     def update(self):
         self.render_background()
@@ -227,6 +227,7 @@ class ObjectManagementSystem(ecs.System):
         screen_lower_bound = screen_entity.components['lower_bound']
 
         asteroids = set(ecs.Entity.filter('id', where='asteroid'))
+        print(len(asteroids), len(set(ecs.Entity.filter('contour_to_render'))))
         envelopes = set(ecs.Entity.filter('id', where='envelope'))
         enemies = set(ecs.Entity.filter('id', where='enemy'))
         entities_to_check = list(asteroids|envelopes|enemies)
@@ -314,16 +315,18 @@ def get_face_position(go, center):
     while go.value>0:
         ret, img = cap.read()
         # handle err if ret is False
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        rects = detector(gray, 0)
-        for rect in rects:
-            x, y, w, h = rect_to_bb(rect)
-            shape = predictor(gray, rect)
-            shape_np = shape_to_np(shape, 5, "int")
-            center_x, center_y = shape_np[4]
-            relative_x = (img.shape[1]-center_x)/img.shape[1]
-            relative_y = center_y/img.shape[0]
-            center.append((relative_x, relative_y))
+        try:
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            rects = detector(gray, 0)
+            for rect in rects:
+                x, y, w, h = rect_to_bb(rect)
+                shape = predictor(gray, rect)
+                shape_np = shape_to_np(shape, 5, "int")
+                center_x, center_y = shape_np[4]
+                relative_x = (img.shape[1]-center_x)/img.shape[1]
+                relative_y = center_y/img.shape[0]
+                center.append((relative_x, relative_y))
+        except: pass
     cap.release()
 
 if __name__ == '__main__':
